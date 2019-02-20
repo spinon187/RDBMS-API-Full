@@ -128,6 +128,56 @@ server.post('/api/cohorts/:cohort_id/students', async (req, res) => {
     }
   })
 
+  server.get('/api/cohorts/:cohort_id/students/:id', async (req, res) => {
+    const id = req.params.id;
+  
+    try {
+      const student = await db('students')
+      .where({id});
+      res.status(200).json(student);
+    }
+    catch(error) {
+      res.status(500).json(error);
+    }
+  })
+
+  server.put('/api/cohorts/:cohort_id/students/:id', async (req, res) => {
+    const id = req.params.id;
+    try {
+      const count = await db('students')
+        .where({id})
+        .update(req.body);
+      if (count > 0) {
+        const student = await db('students')
+          .where({id})
+          .first();
+        res.status(200).json(student);
+      }
+      else {
+        res.status(404).json({message: 'not found'});
+      }
+    } 
+    catch(error){}
+  });
+
+  server.delete('/api/cohorts/:cohort_id/students/:id', async (req, res) => {
+    const id = req.params.id;
+    
+    try {
+      const count = await db('students')
+        .where({id})
+        .del();
+  
+      if (count > 0) {
+        res.status(204).end();
+      }
+      else {
+        res.status(404).json({message: 'not found'});
+      }
+    }
+    catch (error){}
+  });
+
 const port = 3300;
 server.listen(port, function() {
   console.log(`\n=== Web API Listening on http://localhost:${port} ===\n`);
