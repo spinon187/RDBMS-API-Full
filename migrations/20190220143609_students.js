@@ -4,12 +4,13 @@ exports.up = function(knex, Promise) {
         tbl.increments('id');
         tbl.string('name', 128).notNullable();
         tbl
-            .integer('cohort_id')
+            .string('cohort_name')
             .unsigned()
-            .references('id')
+            .references('name')
             .inTable('cohorts')
             .onDelete('CASCADE')
-            .onUpdate('CASCADE');
+            .onUpdate('CASCADE')
+            .notNullable();
         tbl.timestamps(true, true);
   })
 };

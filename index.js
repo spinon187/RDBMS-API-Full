@@ -45,12 +45,12 @@ server.post('/api/cohorts', async (req, res) => {
   }
 })
 
-server.get('/api/cohorts/:id', async (req, res) => {
-  const id = req.params.id
+server.get('/api/cohorts/:name', async (req, res) => {
+  const name = req.params.name
 
   try {
     const cohort = await db('cohorts')
-      .where({id})
+      .where({name})
       .first();
     res.status(200).json(cohort);
   }
@@ -59,16 +59,16 @@ server.get('/api/cohorts/:id', async (req, res) => {
   }
 })
 
-server.put('/api/cohorts/:id', async (req, res) => {
-  const id = req.params.id;
+server.put('/api/cohorts/:name', async (req, res) => {
+  const name = req.params.name;
 
   try {
     const count = await db('cohorts')
-      .where({id})
+      .where({name})
       .update(req.body);
     if (count > 0) {
       const cohort = await db('cohorts')
-        .where({id})
+        .where({name})
         .first();
       res.status(200).json(cohort);
     }
@@ -79,12 +79,12 @@ server.put('/api/cohorts/:id', async (req, res) => {
   catch(error){}
 });
 
-server.delete('/api/cohorts/:id', async (req, res) => {
-  const id = req.params.id;
+server.delete('/api/cohorts/:name', async (req, res) => {
+  const name = req.params.name;
   
   try {
     const count = await db('cohorts')
-      .where({id})
+      .where({name})
       .del();
 
     if (count > 0) {
@@ -98,12 +98,12 @@ server.delete('/api/cohorts/:id', async (req, res) => {
 });
 
 
-server.get('/api/cohorts/:cohort_id/students', async (req, res) => {
-  const cohortID = req.params.cohort_id;
+server.get('/api/cohorts/:cohort_name/students', async (req, res) => {
+  const name = req.params.cohort_name;
 
   try {
     const students = await db('students')
-    .where({cohort_id: cohortID});
+    .where({cohort_name: name});
     res.status(200).json(students);
   }
   catch(error) {
@@ -111,9 +111,9 @@ server.get('/api/cohorts/:cohort_id/students', async (req, res) => {
   }
 })
 
-server.post('/api/cohorts/:cohort_id/students', async (req, res) => {
-    const cohortID = req.params.cohort_id;
-    const studentObj = {name: req.body.name, cohort_id: cohortID}
+server.post('/api/cohorts/:cohort_name/students', async (req, res) => {
+    const cohortName = req.params.cohort_name;
+    const studentObj = {name: req.body.name, cohort_name: cohortName}
     try {
       const id = await db('students').insert(studentObj);
   
@@ -128,7 +128,7 @@ server.post('/api/cohorts/:cohort_id/students', async (req, res) => {
     }
   })
 
-  server.get('/api/cohorts/:cohort_id/students/:id', async (req, res) => {
+  server.get('/api/cohorts/:cohort_name/students/:id', async (req, res) => {
     const id = req.params.id;
   
     try {
@@ -141,7 +141,7 @@ server.post('/api/cohorts/:cohort_id/students', async (req, res) => {
     }
   })
 
-  server.put('/api/cohorts/:cohort_id/students/:id', async (req, res) => {
+  server.put('/api/cohorts/:cohort_name/students/:id', async (req, res) => {
     const id = req.params.id;
     try {
       const count = await db('students')
@@ -160,7 +160,7 @@ server.post('/api/cohorts/:cohort_id/students', async (req, res) => {
     catch(error){}
   });
 
-  server.delete('/api/cohorts/:cohort_id/students/:id', async (req, res) => {
+  server.delete('/api/cohorts/:cohort_name/students/:id', async (req, res) => {
     const id = req.params.id;
     
     try {
